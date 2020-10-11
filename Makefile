@@ -1,6 +1,6 @@
 RELEASE_VERSION ?= latest
 
-SUBDIRS=connect-docker-image transformer
+SUBDIRS=connect-docker-image transformer sentiment-analysis
 DOCKER_TARGETS=docker_build docker_push docker_tag
 
 all: $(SUBDIRS)

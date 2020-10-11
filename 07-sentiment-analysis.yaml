@@ -1,0 +1,113 @@
+###########
+# Kafka Streams API -> Sentiment Analysis
+###########
+
+# Topics
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: telegram-replies
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  partitions: 3
+  replicas: 3
+---
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: telegram-texts
+  labels:
+      strimzi.io/cluster: my-cluster
+spec:
+  replicas: 3
+  partitions: 3
+---
+
+# User
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaUser
+metadata:
+  name: sentiment-analysis
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  authentication:
+    type: tls
+  authorization:
+    type: simple
+    acls:
+      - resource:
+          type: topic
+          name: telegram-texts
+        operation: Read
+      - resource:
+          type: topic
+          name: telegram-texts
+        operation: Describe
+      - resource:
+          type: group
+          name: sentiment-analysis
+          patternType: prefix
+        operation: Read
+      - resource:
+          type: topic
+          name: telegram-replies
+        operation: Write
+      - resource:
+          type: topic
+          name: telegram-replies
+        operation: Create
+      - resource:
+          type: topic
+          name: telegram-replies
+        operation: Describe
+---
+
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: sentiment-analysis
+  name: sentiment-analysis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sentiment-analysis
+  template:
+    metadata:
+      labels:
+        app: sentiment-analysis
+    spec:
+      containers:
+        - name: sentiment-analysis
+          image: quay.io/scholzj/demo-kafka-strimzi-telegram-ml-sentiment-analysis:latest
+          env:
+            - name: CA_CRT
+              valueFrom:
+                secretKeyRef:
+                  name: my-cluster-cluster-ca-cert
+                  key: ca.crt
+            - name: USER_CRT
+              valueFrom:
+                secretKeyRef:
+                  name: sentiment-analysis
+                  key: user.crt
+            - name: USER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: sentiment-analysis
+                  key: user.key
+            - name: BOOTSTRAP_SERVERS
+              value: my-cluster-kafka-bootstrap:9093
+            - name: APPLICATION_ID
+              value: sentiment-analysis
+            - name: SOURCE_TOPIC
+              value: telegram-texts
+            - name: TARGET_TOPIC
+              value: telegram-replies
+            - name: LOG_LEVEL
+              value: "INFO"
