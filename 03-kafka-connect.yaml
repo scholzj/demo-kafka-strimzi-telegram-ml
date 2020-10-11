@@ -13,7 +13,7 @@ metadata:
     strimzi.io/cluster: my-cluster
 spec:
   partitions: 3
-  replicas: 1
+  replicas: 3
 ---
 
 apiVersion: kafka.strimzi.io/v1beta1
@@ -24,7 +24,7 @@ metadata:
     strimzi.io/cluster: my-cluster
 spec:
   partitions: 3
-  replicas: 1
+  replicas: 3
 ---
 
 # Connect User

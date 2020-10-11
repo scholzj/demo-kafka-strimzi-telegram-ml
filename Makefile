@@ -1,6 +1,6 @@
 RELEASE_VERSION ?= latest
 
-SUBDIRS=connect-docker-image
+SUBDIRS=connect-docker-image transformer
 DOCKER_TARGETS=docker_build docker_push docker_tag
 
 all: $(SUBDIRS)

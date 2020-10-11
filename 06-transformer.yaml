@@ -1,0 +1,113 @@
+###########
+# Kafka Streams API -> Transformer
+###########
+
+# Topics
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: telegram-requests
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  partitions: 3
+  replicas: 3
+---
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: telegram-texts
+  labels:
+      strimzi.io/cluster: my-cluster
+spec:
+  replicas: 3
+  partitions: 3
+---
+
+# User
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaUser
+metadata:
+  name: telegram-transformer
+  labels:
+    strimzi.io/cluster: my-cluster
+spec:
+  authentication:
+    type: tls
+  authorization:
+    type: simple
+    acls:
+      - resource:
+          type: topic
+          name: telegram-requests
+        operation: Read
+      - resource:
+          type: topic
+          name: telegram-requests
+        operation: Describe
+      - resource:
+          type: group
+          name: telegram-transformer
+          patternType: prefix
+        operation: Read
+      - resource:
+          type: topic
+          name: telegram-texts
+        operation: Write
+      - resource:
+          type: topic
+          name: telegram-texts
+        operation: Create
+      - resource:
+          type: topic
+          name: telegram-texts
+        operation: Describe
+---
+
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: telegram-transformer
+  name: telegram-transformer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: telegram-transformer
+  template:
+    metadata:
+      labels:
+        app: telegram-transformer
+    spec:
+      containers:
+        - name: telegram-transformer
+          image: quay.io/scholzj/demo-kafka-strimzi-telegram-ml-transformer:latest
+          env:
+            - name: CA_CRT
+              valueFrom:
+                secretKeyRef:
+                  name: my-cluster-cluster-ca-cert
+                  key: ca.crt
+            - name: USER_CRT
+              valueFrom:
+                secretKeyRef:
+                  name: telegram-transformer
+                  key: user.crt
+            - name: USER_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: telegram-transformer
+                  key: user.key
+            - name: BOOTSTRAP_SERVERS
+              value: my-cluster-kafka-bootstrap:9093
+            - name: APPLICATION_ID
+              value: telegram-transformer
+            - name: SOURCE_TOPIC
+              value: telegram-requests
+            - name: TARGET_TOPIC
+              value: telegram-texts
+            - name: LOG_LEVEL
+              value: "INFO"
