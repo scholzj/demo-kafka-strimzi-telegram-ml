@@ -31,7 +31,7 @@ spec:
 apiVersion: kafka.strimzi.io/v1alpha1
 kind: KafkaUser
 metadata:
-  name: my-connect-cluster
+  name: my-connect
   labels:
     strimzi.io/cluster: my-cluster
 spec:
@@ -159,7 +159,7 @@ spec:
   authentication:
     type: tls
     certificateAndKey:
-      secretName: my-connect-cluster
+      secretName: my-connect
       certificate: user.crt
       key: user.key
   externalConfiguration:
