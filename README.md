@@ -10,7 +10,7 @@ This demo includes several Apache Kafka components running on Kubernetes and orc
 
 ## Prerequisites
 
-* Create a Telegram account and register a Bot. Botfather will give you API key for this bot
+* Create a Telegram account and register a Bot. BotFather will give you API key for this bot
 
 * Prepare properties file with the Telegram Bot token which will look something like this (you have to use your real Telegram token 😉):
 ```properties
