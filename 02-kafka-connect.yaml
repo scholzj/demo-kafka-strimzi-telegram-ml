@@ -127,6 +127,10 @@ spec:
     - resource:
         type: topic
         name: telegram-replies
+      operation: Read
+    - resource:
+        type: topic
+        name: telegram-replies
       operation: Describe
     - resource:
         type: topic
