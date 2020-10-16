@@ -47,7 +47,7 @@ public class TelegramTransformer {
         // Branch 0 => Photos
         branches[0]
                 .map((key, message) -> KeyValue.pair(message.getChat().getId().toString(), getPhotoFile(config, message)))
-                .peek((key, value) -> LOG.info("Processing message with chat ID {} and some photo {}", key, value))
+                .peek((key, value) -> LOG.info("Processing message with chat ID {} and some photo", key))
                 .to(config.getObjectDetectionTopic(), Produced.with(Serdes.String(), Serdes.String()));
 
         // Branch 1 => Texts
