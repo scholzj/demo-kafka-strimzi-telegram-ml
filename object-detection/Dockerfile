@@ -14,7 +14,7 @@ ENV ENGINE_CACHE_DIR /tmp/.djl.ai/pytorch
 COPY ./scripts/ /bin
 COPY ./src/main/resources/log4j2.properties /bin/log4j2.properties
 
-ADD target/kafka-strimzi-telegram-ml-sentiment-analysis-1.0-SNAPSHOT.jar /
+ADD target/kafka-strimzi-telegram-ml-object-detection-1.0-SNAPSHOT.jar /
 ADD target/lib /
 
-CMD ["/bin/run.sh", "cz.scholz.demo.ml.sentimentanalysis.SentimentAnalysis"]
+CMD ["/bin/run.sh", "cz.scholz.demo.ml.objectdetection.ObjectDetection"]

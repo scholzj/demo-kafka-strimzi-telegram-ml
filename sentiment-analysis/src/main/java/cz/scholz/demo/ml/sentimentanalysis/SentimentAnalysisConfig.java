@@ -1,3 +1,5 @@
+package cz.scholz.demo.ml.sentimentanalysis;
+
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.common.config.SslConfigs;
 import org.apache.kafka.common.serialization.Serdes;

@@ -1,6 +1,6 @@
 RELEASE_VERSION ?= latest
 
-SUBDIRS=connect-docker-image telegram-transformer sentiment-analysis
+SUBDIRS=connect-docker-image telegram-transformer sentiment-analysis object-detection
 DOCKER_TARGETS=docker_build docker_push docker_tag
 
 all: $(SUBDIRS)

@@ -84,7 +84,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>SentimentAnalysis</mainClass>
+                            <mainClass>cz.scholz.demo.ml.sentimentanalysis.SentimentAnalysis</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

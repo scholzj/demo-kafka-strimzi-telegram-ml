@@ -8,7 +8,7 @@
 apiVersion: kafka.strimzi.io/v1beta1
 kind: KafkaTopic
 metadata:
-  name: telegram-requests
+  name: telegram-inbox
   labels:
     strimzi.io/cluster: my-cluster
 spec:
@@ -19,7 +19,7 @@ spec:
 apiVersion: kafka.strimzi.io/v1beta1
 kind: KafkaTopic
 metadata:
-  name: telegram-replies
+  name: telegram-outbox
   labels:
     strimzi.io/cluster: my-cluster
 spec:
@@ -108,16 +108,12 @@ spec:
     # Connector topics: Telegram Source
     - resource:
         type: topic
-        name: telegram-requests
+        name: telegram-inbox
       operation: Describe
     - resource:
         type: topic
-        name: telegram-requests
+        name: telegram-inbox
       operation: Write
-    - resource:
-        type: topic
-        name: telegram-requests
-      operation: Create
     # Connector topics: Telegram Sink
     - resource:
         type: group
@@ -126,16 +122,12 @@ spec:
       operation: Read
     - resource:
         type: topic
-        name: telegram-replies
+        name: telegram-outbox
       operation: Read
     - resource:
         type: topic
-        name: telegram-replies
+        name: telegram-outbox
       operation: Describe
-    - resource:
-        type: topic
-        name: telegram-replies
-      operation: Create
 ---
 
 # Connect

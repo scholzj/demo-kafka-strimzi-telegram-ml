@@ -13,6 +13,6 @@ spec:
     header.converter: org.apache.kafka.connect.storage.StringConverter
     key.converter.schemas.enable: false
     value.converter.schemas.enable: false
-    topics: telegram-replies 
+    topics: telegram-outbox 
     camel.sink.path.type: bots
     camel.sink.endpoint.authorizationToken: ${file:/opt/kafka/external-configuration/telegram-credentials/telegram-credentials.properties:token}

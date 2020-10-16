@@ -12,7 +12,7 @@ spec:
     value.converter: org.apache.kafka.connect.converters.ByteArrayConverter
     key.converter.schemas.enable: false
     value.converter.schemas.enable: false
-    topics: telegram-requests 
+    topics: telegram-inbox 
     camel.source.marshal: json-jackson
     camel.source.path.type: bots
     camel.source.endpoint.authorizationToken: ${file:/opt/kafka/external-configuration/telegram-credentials/telegram-credentials.properties:token}

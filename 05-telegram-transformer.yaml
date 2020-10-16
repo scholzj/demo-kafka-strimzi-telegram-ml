@@ -6,7 +6,7 @@
 apiVersion: kafka.strimzi.io/v1beta1
 kind: KafkaTopic
 metadata:
-  name: telegram-requests
+  name: telegram-inbox
   labels:
     strimzi.io/cluster: my-cluster
 spec:
@@ -17,7 +17,18 @@ spec:
 apiVersion: kafka.strimzi.io/v1beta1
 kind: KafkaTopic
 metadata:
-  name: telegram-texts
+  name: sentiment-analysis
+  labels:
+      strimzi.io/cluster: my-cluster
+spec:
+  replicas: 3
+  partitions: 3
+---
+
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaTopic
+metadata:
+  name: object-detection
   labels:
       strimzi.io/cluster: my-cluster
 spec:
@@ -40,11 +51,11 @@ spec:
     acls:
       - resource:
           type: topic
-          name: telegram-requests
+          name: telegram-inbox
         operation: Read
       - resource:
           type: topic
-          name: telegram-requests
+          name: telegram-inbox
         operation: Describe
       - resource:
           type: group
@@ -53,15 +64,19 @@ spec:
         operation: Read
       - resource:
           type: topic
-          name: telegram-texts
+          name: sentiment-analysis
         operation: Write
       - resource:
           type: topic
-          name: telegram-texts
-        operation: Create
+          name: sentiment-analysis
+        operation: Describe
       - resource:
           type: topic
-          name: telegram-texts
+          name: object-detection
+        operation: Write
+      - resource:
+          type: topic
+          name: object-detection
         operation: Describe
 ---
 
@@ -101,13 +116,20 @@ spec:
                 secretKeyRef:
                   name: telegram-transformer
                   key: user.key
+            - name: TELEGRAM_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: telegram-credentials
+                  key: telegram-credentials.properties
             - name: BOOTSTRAP_SERVERS
               value: my-cluster-kafka-bootstrap:9093
             - name: APPLICATION_ID
               value: telegram-transformer
             - name: SOURCE_TOPIC
-              value: telegram-requests
-            - name: TARGET_TOPIC
-              value: telegram-texts
+              value: telegram-inbox
+            - name: SENTIMENT_ANALYSIS_TOPIC
+              value: sentiment-analysis
+            - name: OBJECT_DETECTION_TOPIC
+              value: object-detection
             - name: LOG_LEVEL
               value: "INFO"

@@ -1,5 +1,5 @@
 ###########
-# Kafka Streams API -> Sentiment Analysis
+# Kafka Streams API -> Object Detection
 ###########
 
 # Topics
@@ -17,7 +17,7 @@ spec:
 apiVersion: kafka.strimzi.io/v1beta1
 kind: KafkaTopic
 metadata:
-  name: sentiment-analysis
+  name: object-detection
   labels:
       strimzi.io/cluster: my-cluster
 spec:
@@ -29,7 +29,7 @@ spec:
 apiVersion: kafka.strimzi.io/v1beta1
 kind: KafkaUser
 metadata:
-  name: sentiment-analysis
+  name: object-detection
   labels:
     strimzi.io/cluster: my-cluster
 spec:
@@ -40,15 +40,15 @@ spec:
     acls:
       - resource:
           type: topic
-          name: sentiment-analysis
+          name: object-detection
         operation: Read
       - resource:
           type: topic
-          name: sentiment-analysis
+          name: object-detection
         operation: Describe
       - resource:
           type: group
-          name: sentiment-analysis
+          name: object-detection
           patternType: prefix
         operation: Read
       - resource:
@@ -66,21 +66,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: sentiment-analysis
-  name: sentiment-analysis
+    app: object-detection
+  name: object-detection
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sentiment-analysis
+      app: object-detection
   template:
     metadata:
       labels:
-        app: sentiment-analysis
+        app: object-detection
     spec:
       containers:
-        - name: sentiment-analysis
-          image: quay.io/scholzj/demo-kafka-strimzi-telegram-ml-sentiment-analysis:latest
+        - name: object-detection
+          image: quay.io/scholzj/demo-kafka-strimzi-telegram-ml-object-detection:latest
           env:
             - name: CA_CRT
               valueFrom:
@@ -90,19 +90,19 @@ spec:
             - name: USER_CRT
               valueFrom:
                 secretKeyRef:
-                  name: sentiment-analysis
+                  name: object-detection
                   key: user.crt
             - name: USER_KEY
               valueFrom:
                 secretKeyRef:
-                  name: sentiment-analysis
+                  name: object-detection
                   key: user.key
             - name: BOOTSTRAP_SERVERS
               value: my-cluster-kafka-bootstrap:9093
             - name: APPLICATION_ID
-              value: sentiment-analysis
+              value: object-detection
             - name: SOURCE_TOPIC
-              value: sentiment-analysis
+              value: object-detection
             - name: TARGET_TOPIC
               value: telegram-outbox
             - name: LOG_LEVEL

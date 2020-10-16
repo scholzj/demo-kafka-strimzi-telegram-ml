@@ -2,8 +2,8 @@
 
 This demo includes several Apache Kafka components running on Kubernetes and orchestrated by Strimzi:
 * Apache Kafka Connect with the [Apache Camel Telegram source connector](https://camel.apache.org/camel-kafka-connector/latest/) is used to load messages from the [Telegram IM service](https://telegram.org/)
-* The messages are transformed by a [simple Kafka Streams API application](./telegram-transformer/) where the message text and chat id are extracted from the original Telegram message
-* The transformed messages are passed to [another Kafka Streams application](./sentiment-analysis/) which uses [Deep Java Library](https://djl.ai/) to do a sentiment analysis of the text and prepare an answer with the analysis results
+* The messages are transformed by a [simple Kafka Streams API application](./telegram-transformer/) where the message text or photo and chat id are extracted from the original Telegram message
+* The transformed messages are passed to [another Kafka Streams applications](./sentiment-analysis/) which uses [Deep Java Library](https://djl.ai/) to do a sentiment analysis of the text or object detection on the photo and prepare an answer with the analysis results
 * The answer is send back to Telegram using Apache Camel Telegram sink connector
 
 ![Diagram](./assets/diagram.png)
@@ -87,8 +87,16 @@ kubectl apply -f 05-telegram-transformer.yaml
 kubectl apply -f 06-sentiment-analysis.yaml
 ```
 
+* And the Streams API app doing the sentiment analysis:
+```
+kubectl apply -f 07-object-detection.yaml
+```
+
 ### Check the result
 
-Once everything is running, you can check the result. On Telegram, send message to your bot and wait for the answer. You should see something like this.
+Once everything is running, you can check the result. On Telegram, send message to your bot and wait for the answer. You should see something like this:
 
 ![Example](./assets/example.png)
+
+Or this:
+![Example2](./assets/example2.png)

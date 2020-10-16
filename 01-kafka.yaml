@@ -16,7 +16,10 @@ spec:
       -Xms: 1024m
       -Xmx: 1024m
     listeners:
-      tls:
+      - name: secure
+        port: 9093
+        type: internal
+        tls: true
         authentication:
           type: tls
     authorization:

@@ -1,3 +1,5 @@
+package cz.scholz.demo.ml.objectdetection;
+
 import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.common.config.SslConfigs;
 import org.apache.kafka.common.serialization.Serdes;
@@ -8,8 +10,8 @@ import org.apache.logging.log4j.Logger;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-public class TelegramTransformerConfig {
-    private static final Logger log = LogManager.getLogger(TelegramTransformerConfig.class);
+public class ObjectDetectionConfig {
+    private static final Logger log = LogManager.getLogger(ObjectDetectionConfig.class);
 
     private static final int DEFAULT_COMMIT_INTERVAL_MS = 5000;
     private final String bootstrapServers;
@@ -23,7 +25,7 @@ public class TelegramTransformerConfig {
     private final String keyStorePath;
     private final String additionalConfig;
 
-    public TelegramTransformerConfig(String bootstrapServers, String applicationId, String sourceTopic, String targetTopic, int commitIntervalMs, String trustStorePassword, String trustStorePath, String keyStorePassword, String keyStorePath, String additionalConfig) {
+    public ObjectDetectionConfig(String bootstrapServers, String applicationId, String sourceTopic, String targetTopic, int commitIntervalMs, String trustStorePassword, String trustStorePath, String keyStorePassword, String keyStorePath, String additionalConfig) {
         this.bootstrapServers = bootstrapServers;
         this.applicationId = applicationId;
         this.sourceTopic = sourceTopic;
@@ -36,7 +38,7 @@ public class TelegramTransformerConfig {
         this.additionalConfig = additionalConfig;
     }
 
-    public static TelegramTransformerConfig fromEnv() {
+    public static ObjectDetectionConfig fromEnv() {
         String bootstrapServers = System.getenv("BOOTSTRAP_SERVERS");
         String sourceTopic = System.getenv("SOURCE_TOPIC");
         String targetTopic = System.getenv("TARGET_TOPIC");
@@ -48,10 +50,10 @@ public class TelegramTransformerConfig {
         String keyStorePath = System.getenv("KEYSTORE_PATH") == null ? null : System.getenv("KEYSTORE_PATH");
         String additionalConfig = System.getenv().getOrDefault("ADDITIONAL_CONFIG", "");
 
-        return new TelegramTransformerConfig(bootstrapServers, applicationId, sourceTopic, targetTopic, commitIntervalMs, trustStorePassword, trustStorePath, keyStorePassword, keyStorePath, additionalConfig);
+        return new ObjectDetectionConfig(bootstrapServers, applicationId, sourceTopic, targetTopic, commitIntervalMs, trustStorePassword, trustStorePath, keyStorePassword, keyStorePath, additionalConfig);
     }
 
-    public static Properties createProperties(TelegramTransformerConfig config) {
+    public static Properties createProperties(ObjectDetectionConfig config) {
         Properties props = new Properties();
 
         props.put(StreamsConfig.APPLICATION_ID_CONFIG, config.getApplicationId());
