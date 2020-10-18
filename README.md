@@ -36,7 +36,7 @@ data:
 
 * Install Strimzi:
 ```
-kubectl apply -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.20.0-rc1/strimzi-cluster-operator-0.20.0-rc1.yaml
+kubectl apply -f https://github.com/strimzi/strimzi-kafka-operator/releases/download/0.20.0-rc2/strimzi-cluster-operator-0.20.0-rc2.yaml
 ```
 
 ### Deploy the Kafka cluster
